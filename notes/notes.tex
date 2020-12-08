@@ -1,0 +1,30 @@
+\documentclass{article}
+
+\usepackage{amsmath, amssymb}
+\usepackage{tabulary, tabularx, graphicx, lscape}
+\usepackage{microtype}
+\usepackage{array}
+\usepackage[breaklinks]{hyperref}
+\usepackage{rotating}
+\usepackage{changepage}
+
+\newtheorem{definition}{Definition}
+\newcolumntype{L}{>{\centering\arraybackslash}m{3cm}}
+\let\oldsection\section
+
+\renewcommand\section{\clearpage\oldsection}
+\renewcommand{\arraystretch}{2.0}
+
+
+\begin{document}
+
+\title{Columbia CS188 - Artificial Intelligence}
+\author{Marco Filippone}
+\maketitle
+
+\include{introduction}
+\include{rational_agents}
+\include{search_agents}
+\include{uninformed_search}
+
+\end{document}

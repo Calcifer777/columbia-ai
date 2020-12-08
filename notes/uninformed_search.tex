@@ -1,0 +1,60 @@
+\section{Uninformed search}
+
+\begin{table}[hb!]
+\begin{adjustwidth}{-2cm}{-2cm}
+\resizebox{1.4\columnwidth}{!}{
+\begin{tabular}{lllllll}
+  Strategy & 
+  Complete & 
+  Time & 
+  Space & 
+  Optimal & 
+  Implementation & 
+  Comment \\
+  BFS &
+  \multicolumn{1}{p{0.12\linewidth}}{Yes, if $b$ is finite} &
+  $O(b^d)$ &
+  $O(b^d)$ &
+  \multicolumn{1}{p{0.20\linewidth}}{Yes, if uniform cost} &
+  FIFO &
+  \multicolumn{1}{p{0.17\linewidth}}{High memory requirement and exponential time complexity} \\
+  DFS &
+  \multicolumn{1}{p{0.17\linewidth}}{No, fails in: infinite depth spaces and spaces with loops} & 
+  $O(b^m)$ &
+  $O(bm)$ &
+  No &
+  LIFO &
+  \multicolumn{1}{p{0.20\linewidth}}{Bad if $m$ is much larger than $d$ but if solutions are dense, may be much faster than BFS} \\
+  Depth limited &
+  &
+  &
+  &
+  &
+  \multicolumn{1}{p{0.20\linewidth}}{DFS with limit} \\
+  & \\
+  Iterative deepening &
+  &
+  &
+  &
+  & 
+  \multicolumn{1}{p{0.20\linewidth}}{Depth deepening with increasing limits} & 
+  \multicolumn{1}{p{0.20\linewidth}}{Benefits of BFS and DFS} \\
+  Uniform cost &
+  \multicolumn{1}{p{0.20\linewidth}}{Yes, if solution has finite cost} &
+  $O(b^{C^*/\varepsilon})$ &
+  \multicolumn{1}{p{0.20\linewidth}}{\# of nodes with $g\leq C^*$, 
+    $O(b^{C^*/\varepsilon})$} &
+  Yes &
+  \multicolumn{1}{p{0.20\linewidth}}{BFS expanding by cost of path (not of last step)} \\
+\end{tabular}}
+\caption{Uninformed Search Strategies}
+\label{tab:my_label}
+\end{adjustwidth}
+\end{table}
+
+Where:
+\begin{itemize}
+  \item $b$ is the branching factor 
+  \item $d$ is the depth level
+  \item $m$ is the maximum possibility of the search space
+\end{itemize}

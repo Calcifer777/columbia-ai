@@ -1,0 +1,72 @@
+\section{Search Agents}
+
+\paragraph{Applications}
+\begin{itemize}
+  \item Route-finding problem
+  \item Travelling salesmane person
+  \item VSLI layout: position million of components and
+    connections on a chip to minimize area, shorten delays. Aim:
+    put circuit components on a chip so as they don’t overlap and
+    leave space to wiring which is a complex problem.
+  \item Robot navigation
+  \item Automatic assembly sequencing
+  \item Protein folding
+\end{itemize}
+
+\subsection{Problem formulation}
+
+\begin{itemize}
+  \item Initial state: the state in which the agent starts
+  \item States: All states reachable from the initial state by
+    any sequence of actions (State space)
+  \item Actions: possible actions available to the agent. At a
+    state $s$, $Actions(s)$ returns the set of actions that can be
+    executed in state $s$. (\textit{Action space})
+  \item Transition model: A description of what each action does
+    $Results(s, a)$
+  \item Goal test: determines if a given state is a goal state
+  \item Path cost: function that assigns a numeric cost to a path
+    w.r.t. performance measure
+\end{itemize}
+
+\subsection{Search Space}
+
+\begin{itemize}
+  \item State space: a physical configuration
+  \item Search space: an abstract configuration represented by a search tree or graph of possible solutions.
+  \item Search tree: models the sequence of actions
+    \begin{itemize}
+      \item Root: initial state
+      \item Branches: actions
+      \item Nodes: results from actions. A node has: parent, children, depth, path cost, associated state in the state space.
+    \end{itemize}
+  \item Expand: A function that given a node, creates all children nodes
+\end{itemize}
+
+The search space is divided into three regions:
+\begin{itemize}
+  \item Explored (a.k.a. Closed List, Visited Set)
+  \item Frontier (a.k.a. Open List, the Fringe)
+  \item Unexplored.
+\end{itemize}
+
+\subsection{Search Strategies}
+
+\paragraph{Strategy evaluation} Strategies are evaluated along
+the following dimensions:
+\begin{itemize}
+  \item Completeness: Does it always find a solution if one
+    exists?
+  \item Time complexity: Number of nodes generated/expanded
+  \item Space complexity: Maximum number of nodes in memory
+  \item Optimality: Does it always find a least-cost solution?
+\end{itemize}
+
+Time and space complexity: are measured in terms of:
+\begin{itemize}
+  \item $b$: maximum branching factor of the search tree (actions
+    per state).
+  \item $d$: depth of the solution
+  \item $m$, or $D$: maximum depth of the state space (may be
+    $\infty$).
+\end{itemize}
