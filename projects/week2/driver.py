@@ -3,13 +3,17 @@ Skeleton code for Project 1 of Columbia University's AI EdX course (8-puzzle).
 Python 3
 """
 
+import copy
+from collections import deque
+import logging
 import queue as Q
 import time
 import resource
 import sys
 import math
 
-#### SKELETON CODE ####
+logger = logging.getLogger()
+logger.setLevel(logging.WARN)
 
 # The Class that Represents the Puzzle
 
@@ -26,19 +30,33 @@ class PuzzleState(object):
         self.dimension = n
         self.config = config
         self.children = []
+        self.path = None
         for i, item in enumerate(self.config):
             if item == 0:
                 self.blank_row = i // self.n
                 self.blank_col = i % self.n
                 break
+        self.goal = tuple(range(len(self.config)))
+        assert len(self.goal) == len(self.config)
 
-    def display(self):
+    def __repr__(self):
+        s = "\n"
         for i in range(self.n):
             line = []
             offset = i * self.n
             for j in range(self.n):
                 line.append(self.config[offset + j])
-            print(line)
+            s += str(line)+"\n"
+        return s
+
+    def __str__(self):
+        return self.__repr__()
+
+    def __eq__(self, other):
+        return self.config == other.config
+
+    def __hash__(self):
+        return hash(str(self.config))
 
     def move_left(self):
         if self.blank_col == 0:
@@ -83,61 +101,125 @@ class PuzzleState(object):
     def expand(self):
         """expand the node"""
         # add child nodes in order of UDLR
-        if len(self.children) == 0:
-            up_child = self.move_up()
-            if up_child is not None:
-                self.children.append(up_child)
-            down_child = self.move_down()
-            if down_child is not None:
-                self.children.append(down_child)
-            left_child = self.move_left()
-            if left_child is not None:
-                self.children.append(left_child)
-            right_child = self.move_right()
-            if right_child is not None:
-                self.children.append(right_child)
+        if len(self.children) != 0:
+            return self.children
+        children = [
+            self.move_up(),
+            self.move_down(),
+            self.move_left(),
+            self.move_right()
+        ]
+        self.children = list(filter(None, children))
         return self.children
 
+    def is_goal(self):
+        return self.config == self.goal
+
+    def get_path(self):
+        if self.path:
+            return self.path
+        state = self
+        path = []
+        while state.parent is not None:
+            path.append(state.action)
+            state = state.parent
+        self.path = path[::-1]
+        return self.path
+
 # Function that Writes to output.txt
-
-# Students need to change the method to have the corresponding parameters
-
+# Students need to change the method to have the corresponding
+# parameters
 
 def writeOutput():
     # Student Code Goes here
+    pass
 
 
 def bfs_search(initial_state):
     """BFS search"""
-    ### STUDENT CODE GOES HERE ###
+    q = Q.Queue()
+    q.put(initial_state)
+    nodes_expanded = set()
+    max_search_depth = 0
+    while q.empty() is False:
+        state = q.get()
+        if state.is_goal():
+            break
+        for new_state in state.expand():
+            if new_state not in nodes_expanded:
+                q.put(new_state)
+                if new_state.cost > max_search_depth:
+                    max_search_depth = new_state.cost
+        nodes_expanded.add(state)
+        logging.info(f"Queue size: {q.qsize()}")
+        logging.info(f"Visited: {len(nodes_expanded)}")
+        logging.info(state)
+    result = {
+        'path_to_goal': state.get_path(),
+        'nodes_expanded': len(nodes_expanded),
+        'cost_of_path': state.cost,
+        'search_depth': len(state.get_path()),
+        'max_search_depth': max_search_depth
+    }
+    return result
 
 
 def dfs_search(initial_state):
     """DFS search"""
-    ### STUDENT CODE GOES HERE ###
+    q = Q.LifoQueue()
+    q.put(initial_state)
+    nodes_visited, nodes_expanded = set(), set()
+    nodes_visited.add(initial_state)
+    max_search_depth = 0
+    while q.empty() is False:
+        state = q.get()
+        if state.is_goal():
+            break
+        for new_state in state.expand()[::-1]:
+            if new_state not in nodes_visited:
+                q.put(new_state)
+                nodes_visited.add(new_state)
+                if new_state.cost > max_search_depth:
+                    max_search_depth = new_state.cost
+        nodes_expanded.add(state)
+        logging.info(f"Queue size: {q.qsize()}")
+        logging.info(f"Visited: {len(nodes_expanded)}")
+    result = {
+        'path_to_goal': state.get_path(),
+        'nodes_expanded': len(nodes_expanded),
+        'cost_of_path': state.cost,
+        'search_depth': len(state.get_path()),
+        'max_search_depth': max_search_depth
+    }
+    return result
 
 
 def A_star_search(initial_state):
     """A * search"""
     ### STUDENT CODE GOES HERE ###
+    pass
 
 
 def calculate_total_cost(state):
     """calculate the total estimated cost of a state"""
     ### STUDENT CODE GOES HERE ###
+    pass
 
 
 def calculate_manhattan_dist(idx, value, n):
     """calculate the manhattan distance of a tile"""
     ### STUDENT CODE GOES HERE ###
+    pass
 
 
 def test_goal(puzzle_state):
     """test the state is the goal state or not"""
     ### STUDENT CODE GOES HERE ###
+    pass
 
 
-# Main Function that reads in Input and Runs corresponding Algorithm
+# Main Function that reads in Input and Runs 
+# corresponding Algorithm
 def main():
     sm = sys.argv[1].lower()
     begin_state = sys.argv[2].split(",")
@@ -145,13 +227,15 @@ def main():
     size = int(math.sqrt(len(begin_state)))
     hard_state = PuzzleState(begin_state, size)
     if sm == "bfs":
-        bfs_search(hard_state)
+        result = bfs_search(hard_state)
     elif sm == "dfs":
-        dfs_search(hard_state)
+        result = dfs_search(hard_state)
     elif sm == "ast":
-        A_star_search(hard_state)
+        result = A_star_search(hard_state)
     else:
         print("Enter valid command arguments !")
+    print(result)
+    return
 
 
 if __name__ == '__main__':

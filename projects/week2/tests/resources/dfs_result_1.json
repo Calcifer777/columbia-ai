@@ -1,0 +1,11 @@
+{
+    "cost_of_path": 3,
+    "max_search_depth": 66125,
+    "nodes_expanded": 181437,
+    "path_to_goal": [
+        "Up",
+        "Left",
+        "Left"
+    ],
+    "search_depth": 3
+}
