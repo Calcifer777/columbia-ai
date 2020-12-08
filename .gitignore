@@ -1,5 +1,4 @@
-introduction.aux notes.aux rational_agens.aux rational_agents.aux search_agents.aux uninformed_search.aux
-introduction.aux notes.aux rational_agens.aux rational_agents.aux search_agents.aux uninformed_search.aux
-notes.fls rational_agens.fls
-notes.log rational_agens.log
-notes.fdb_latexmk rational_agens.fdb_latexmk
+*.aux
+*.fls
+*.log
+*.fdb_latexmk
