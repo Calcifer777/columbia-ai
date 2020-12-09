@@ -1,8 +1,17 @@
 \section{Uninformed search}
 
+Let:
+\begin{itemize}
+  \item $b$ is the average branching factor 
+  \item $d$ is the depth level
+  \item $m$ is the maximum depth of the search space
+\end{itemize}
+
+
+Then:
 \begin{table}[hb!]
-\begin{adjustwidth}{-2cm}{-2cm}
-\resizebox{1.4\columnwidth}{!}{
+\begin{adjustwidth}{-2.5cm}{-2.5cm}
+\resizebox{1.3\columnwidth}{!}{
 \begin{tabular}{lllllll}
   Strategy & 
   Complete & 
@@ -12,27 +21,27 @@
   Implementation & 
   Comment \\
   BFS &
-  \multicolumn{1}{p{0.12\linewidth}}{Yes, if $b$ is finite} &
+  If $b$ is finite &
   $O(b^d)$ &
   $O(b^d)$ &
-  \multicolumn{1}{p{0.20\linewidth}}{Yes, if uniform cost} &
+  \multicolumn{1}{p{0.11\linewidth}}{Yes, if uniform cost} &
   FIFO &
-  \multicolumn{1}{p{0.17\linewidth}}{High memory requirement and exponential time complexity} \\
+  \multicolumn{1}{p{0.17\linewidth}}{High memory, exponential time} \\
   DFS &
   \multicolumn{1}{p{0.17\linewidth}}{No, fails in: infinite depth spaces and spaces with loops} & 
   $O(b^m)$ &
   $O(bm)$ &
   No &
   LIFO &
-  \multicolumn{1}{p{0.20\linewidth}}{Bad if $m$ is much larger than $d$ but if solutions are dense, may be much faster than BFS} \\
-  Depth limited &
+  \multicolumn{1}{p{0.18\linewidth}}{Bad if $m$ is much larger than $d$ but if solutions are dense, may be much faster than BFS} \\
+  \multicolumn{1}{p{0.13\linewidth}}{Depth limited Search} &
   &
   &
   &
   &
-  \multicolumn{1}{p{0.20\linewidth}}{DFS with limit} \\
+  DFS with limit \\
   & \\
-  Iterative deepening &
+  Iterative Deepening &
   &
   &
   &
@@ -42,19 +51,12 @@
   Uniform cost &
   \multicolumn{1}{p{0.20\linewidth}}{Yes, if solution has finite cost} &
   $O(b^{C^*/\varepsilon})$ &
-  \multicolumn{1}{p{0.20\linewidth}}{\# of nodes with $g\leq C^*$, 
-    $O(b^{C^*/\varepsilon})$} &
+  \multicolumn{1}{p{0.18\linewidth}}{\# of nodes with $g\leq C^* \rightarrow O(b^{C^*/\varepsilon})$} &
   Yes &
-  \multicolumn{1}{p{0.20\linewidth}}{BFS expanding by cost of path (not of last step)} \\
+  \multicolumn{1}{p{0.20\linewidth}}{BFS expanding by cost of path (not of last step)}
 \end{tabular}}
 \caption{Uninformed Search Strategies}
 \label{tab:my_label}
 \end{adjustwidth}
 \end{table}
 
-Where:
-\begin{itemize}
-  \item $b$ is the average branching factor 
-  \item $d$ is the depth level
-  \item $m$ is the maximum depth of the search space
-\end{itemize}

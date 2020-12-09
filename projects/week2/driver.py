@@ -215,7 +215,7 @@ def calculate_manhattan_dist(idx, value, n):
 def test_goal(puzzle_state):
     """test the state is the goal state or not"""
     ### STUDENT CODE GOES HERE ###
-    pass
+    puzzle_state.is_goal()
 
 
 # Main Function that reads in Input and Runs 
