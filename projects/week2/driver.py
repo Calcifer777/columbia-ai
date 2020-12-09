@@ -7,6 +7,7 @@ import copy
 from collections import deque
 import logging
 import queue as Q
+from queue import PriorityQueue
 import time
 import resource
 import sys
@@ -54,6 +55,12 @@ class PuzzleState(object):
 
     def __eq__(self, other):
         return self.config == other.config
+
+    def __lt__(self, other):
+        return (
+            self.cost + calculate_total_cost(self) <= 
+            other.cost + calculate_total_cost(other)
+        )
 
     def __hash__(self):
         return hash(str(self.config))
@@ -196,20 +203,58 @@ def dfs_search(initial_state):
 
 def A_star_search(initial_state):
     """A * search"""
-    ### STUDENT CODE GOES HERE ###
-    pass
+    q = PriorityQueue()
+    q.put((calculate_total_cost(initial_state), initial_state))
+    visited = set()
+    nodes_expanded = set()
+    visited = set()
+    frontier = set()
+    frontier.add(initial_state)
+    max_search_depth = 0
+    while q.empty() is False:
+        state_cost, state = q.get()
+        visited.add(state)
+        frontier.remove(state)
+        if state.is_goal():
+            break
+        for new_state in state.expand():
+            if new_state not in (nodes_expanded | frontier):
+                q.put((calculate_total_cost(new_state), new_state))
+                frontier.add(new_state)
+                visited.add(new_state)
+            elif new_state in frontier:
+
+                if new_state.cost > max_search_depth:
+                    max_search_depth = new_state.cost
+        nodes_expanded.add(state)
+        logging.info(f"Queue size: {q.qsize()}")
+        logging.info(f"Visited: {len(visited)}")
+        logging.info(state)
+    result = {
+        'path_to_goal': state.get_path(),
+        'nodes_expanded': len(nodes_expanded),
+        'cost_of_path': state.cost,
+        'search_depth': len(state.get_path()),
+        'max_search_depth': max_search_depth
+    }
+    return result
 
 
 def calculate_total_cost(state):
     """calculate the total estimated cost of a state"""
-    ### STUDENT CODE GOES HERE ###
-    pass
+    h_cost = 0
+    for idx, value in enumerate(state.config):
+        h_cost += calculate_manhattan_dist(idx, value, state.n)
+    return state.cost + h_cost
 
 
 def calculate_manhattan_dist(idx, value, n):
     """calculate the manhattan distance of a tile"""
-    ### STUDENT CODE GOES HERE ###
-    pass
+    if value == 0:
+        return 0
+    value_x, value_y = idx // n, idx % n
+    sol_x, sol_y = value // n, value % n
+    return abs(sol_x-value_x) + abs(sol_y-value_y)
 
 
 def test_goal(puzzle_state):
