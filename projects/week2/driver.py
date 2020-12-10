@@ -153,12 +153,8 @@ def bfs_search(initial_state):
         for new_state in state.expand():
             if new_state not in nodes_expanded:
                 q.put(new_state)
-                if new_state.cost > max_search_depth:
-                    max_search_depth = new_state.cost
+                max_search_depth = max(new_state.cost, max_search_depth)
         nodes_expanded.add(state)
-        logging.info(f"Queue size: {q.qsize()}")
-        logging.info(f"Visited: {len(nodes_expanded)}")
-        logging.info(state)
     result = {
         'path_to_goal': state.get_path(),
         'nodes_expanded': len(nodes_expanded),
@@ -184,11 +180,8 @@ def dfs_search(initial_state):
             if new_state not in nodes_visited:
                 q.put(new_state)
                 nodes_visited.add(new_state)
-                if new_state.cost > max_search_depth:
-                    max_search_depth = new_state.cost
+                max_search_depth = max(new_state.cost, max_search_depth)
         nodes_expanded.add(state)
-        logging.info(f"Queue size: {q.qsize()}")
-        logging.info(f"Visited: {len(nodes_expanded)}")
     result = {
         'path_to_goal': state.get_path(),
         'nodes_expanded': len(nodes_expanded),
@@ -223,10 +216,7 @@ def A_star_search(initial_state):
     """A * search"""
     q = PriorityQueue()
     q.put((calculate_total_cost(initial_state), initial_state))
-    visited = set()
-    nodes_expanded = set()
-    visited = set()
-    frontier = set()
+    visited, frontier, nodes_expanded = set(), set(), set()
     frontier.add(initial_state)
     max_search_depth = 0
     while q.empty() is False:
@@ -239,16 +229,10 @@ def A_star_search(initial_state):
             if new_state not in (visited | frontier):
                 q.put((calculate_total_cost(new_state), new_state))
                 frontier.add(new_state)
-                if new_state.cost > max_search_depth:
-                    max_search_depth = new_state.cost
-                else:
-                    pass
+                max_search_depth = max(new_state.cost, max_search_depth)
             elif new_state in frontier:
                 q = decrease_key(q, new_state)
         nodes_expanded.add(state)
-        logging.info(f"Queue size: {q.qsize()}")
-        logging.info(f"Visited: {len(visited)}")
-        logging.info(state)
     result = {
         'path_to_goal': state.get_path(),
         'nodes_expanded': len(nodes_expanded),
