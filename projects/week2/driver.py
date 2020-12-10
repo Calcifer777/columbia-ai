@@ -8,6 +8,7 @@ from collections import deque
 import logging
 import queue as Q
 from queue import PriorityQueue
+from heapq import *
 import time
 import resource
 import sys
@@ -57,10 +58,7 @@ class PuzzleState(object):
         return self.config == other.config
 
     def __lt__(self, other):
-        return (
-            self.cost + calculate_total_cost(self) <= 
-            other.cost + calculate_total_cost(other)
-        )
+        return calculate_total_cost(self) <= calculate_total_cost(other)
 
     def __hash__(self):
         return hash(str(self.config))
@@ -201,6 +199,26 @@ def dfs_search(initial_state):
     return result
 
 
+def decrease_key(q, new):
+    buf = []
+    old, old_cost = None, None
+    while q.not_empty:
+        cost, item = q.get()
+        if item == new:
+            old = item
+            old_cost = cost
+            break
+        buf.append((cost, item))
+    for y in buf:
+        q.put(y)
+    new_cost = calculate_total_cost(new)
+    if new_cost < old_cost:
+        q.put((new_cost, new))
+    else:
+        q.put((old_cost, old))
+    return q
+
+
 def A_star_search(initial_state):
     """A * search"""
     q = PriorityQueue()
@@ -218,14 +236,15 @@ def A_star_search(initial_state):
         if state.is_goal():
             break
         for new_state in state.expand():
-            if new_state not in (nodes_expanded | frontier):
+            if new_state not in (visited | frontier):
                 q.put((calculate_total_cost(new_state), new_state))
                 frontier.add(new_state)
-                visited.add(new_state)
-            elif new_state in frontier:
-
                 if new_state.cost > max_search_depth:
                     max_search_depth = new_state.cost
+                else:
+                    pass
+            elif new_state in frontier:
+                q = decrease_key(q, new_state)
         nodes_expanded.add(state)
         logging.info(f"Queue size: {q.qsize()}")
         logging.info(f"Visited: {len(visited)}")

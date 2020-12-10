@@ -75,7 +75,7 @@ def dfs_sample(request):
             {
                 "path_to_goal": ['Down', 'Right', 'Up', 'Up', 'Left', 'Down', 'Right', 'Down', 'Left', 'Up', 'Left', 'Up', 'Right', 'Right', 'Down', 'Down', 'Left', 'Left', 'Up', 'Up'],
                 "cost_of_path": 20,
-                "nodes_expanded": 651,
+                "nodes_expanded": 531,  # was 651,
                 "search_depth": 20,
                 "max_search_depth": 20
             }
@@ -85,7 +85,7 @@ def dfs_sample(request):
             {
                 'path_to_goal': ['Left', 'Up', 'Up', 'Left', 'Down', 'Right', 'Down', 'Left', 'Up', 'Right', 'Right', 'Up', 'Left', 'Left', 'Down', 'Right', 'Right', 'Up', 'Left', 'Down', 'Down', 'Right', 'Up', 'Left', 'Up', 'Left'],
                 'cost_of_path': 26,
-                'nodes_expanded': 583,
+                'nodes_expanded': 533,  # was 583
                 'search_depth': 26,
                 'max_search_depth': 26
             }
