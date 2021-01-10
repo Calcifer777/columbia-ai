@@ -1,0 +1,35 @@
+\section{Quantifying uncertainty}
+
+\subsection{Conditional probability}
+
+\begin{equation}
+    P(a|b) = \frac{a \wedge B)}{P(b)}  \implies P(A \wedge B) = P(a|b) P(b)
+\end{equation}
+
+\begin{equation}
+    P(a) = \sum_{b}{P(a, b)} = \sum_{b}{P(a|b)P(b)}
+\end{equation}
+
+Chain rule
+\begin{equation}
+    P(x_1, x_2, \cdots, x_n) = \prod_{i}{P(x_i|x_{i-1}, x_{i-2}, \cdots x_1)}
+\end{equation}
+
+\subsection{Independence}
+
+Two r.v. are independent if and only if $P(a, b) == P(a)P(b)$
+
+\subsection{Bayes' Rule}
+
+
+\begin{equation}
+\begin{aligned}
+    P(a|b) &= \frac{P(a, b)}{P(b)} \\
+    &= \frac{P(b|a)P(a)}{P(b)} \\
+    &= \frac{P(b|a)P(a)}{\sum_{i}{P(B|a_i)}} \\
+    &\propto P(b|a)P(a) \thinspace  (w.r.t. a) 
+\end{aligned}
+\end{equation}
+
+
+
