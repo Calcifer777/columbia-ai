@@ -1,0 +1,90 @@
+\section{Markov decision processes}
+
+\subsection{Introduction}
+
+An MDP is defined by:
+\begin{itemize}
+    \item A set of states $s \in S$
+    \item A set of actions $a \in A$
+    \item A transition function $T(s, a, a')$ - the model - that represents the probability that $a$ leads to $s'$ fro $s$
+    \item A reward function $R(s, a, s')$
+    \item (Optional) A terminal state
+\end{itemize}
+
+The action outcome depends only on the current state, but not on the history of actions
+
+\subsection{Policies}
+
+A policy is a function that $P: S \mapsto A$, that gives an action for each state. An optimal policy $p^*$ maximizes the expected utility if followed.
+
+\subsection{Discounting rewards}
+
+Solution to avoid infinite rewards:
+\begin{itemize}
+    \item Finite horizon: (similar to depth-limited search)
+    \begin{itemize}
+        \item Terminate episodes after a fixed T steps (e.g. life)
+        \item Gives non-stationary policies ($p$ depends on time left)
+    \end{itemize}
+    \item Discounting: smaller $\gamma$ means smaller “horizon” – shorter term focus
+    \begin{math}
+    U(\overline{r}) = \sum_{t=0}^{\infty}{\gamma^t r_t} \leq \frac{R_{max}}{1-\gamma}
+    \end{math}
+    \item Absorbing state: guarantee that for every policy, a terminal state will eventually be reached
+\end{itemize}
+
+\subsection{Solving MDPs}
+
+Given:
+\begin{itemize}
+    \item $V^*(s)$  the expected utility starting in $s$ and acting optimally
+    \item $Q^*(s, a)$ - q-state - the expected utility starting out having taken action $a$ from state $s$ and thereafter acting optimally
+    \item $\pi^*(s)$ the optimal action from state $s$
+    \item $V_k(s)$ the expected utility starting in $s$ and acting optimally if the game ends in $k$ more time steps
+\end{itemize}
+
+\subsubsection{Value iteration}
+
+Given the Bellman equation:
+\begin{equation}
+    V^*(s) = \underset{a}{max}(R(s,a, s') + \gamma V_k(s'))
+\end{equation}
+
+
+\paragraph{Algorithm} Repeat until convergence:
+\begin{itemize}
+    \item Start with $V_0(s) = 0$: no time steps left means an expected reward sum of zero
+    \item Given vector of $V_k(s)$ values, do one ply of expectimax from each state:
+    \begin{math}
+    V_{k+1}(s) = \underset{a}{max}{R(s,a, s') + \gamma V_K(s')}
+    \end{math}
+\end{itemize}
+
+\paragraph{Properties}
+\begin{itemize}
+    \item Complexity of each iteration: $O(S^2A)$
+    \item Theorem: will converge to unique optimal values
+    \item Basic idea: approximations get refined towards optimal values
+    \item Policy may converge long before values do
+\end{itemize}
+
+\subsection{Policy extraction}
+
+\begin{equation}
+    \pi^*(s) = \underset{a}{arg max}\sum_{s'}{T(s,a,a')[R(s,a, s') + \gamma V_k(s')]}
+\end{equation}
+
+\subsection{Policy iteration}
+
+\paragraph{Algorithm} Repeat steps until policy converges:
+\begin{itemize}
+    \item Policy evaluation: calculate utilities for some fixed policy (not optimal utilities!) until convergence
+    \begin{math}
+    V^{\pi_i}_{k+1}(s) \leftarrow \sum_{s'}{T(s,a,a')[R(s,\pi_i(s)=a, s') + \gamma V^{\pi_i}_K(s')]}
+    \end{math}
+    If the state space is finite, the utilities can also be computed by solving a set of linear equations.
+    \item Policy improvement: update policy using one-step look-ahead with resulting converged (but not optimal!) utilities as future values
+    \begin{math}
+    \pi^*_{i+1}(s) = \underset{a}{argmax}\sum_{s'}{T(s,a,a')[R(s,a, s') + \gamma V_k^{\pi_i}(s')]}
+    \end{math}
+\end{itemize}

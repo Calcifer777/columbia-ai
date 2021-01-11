@@ -2,7 +2,7 @@
 
 \subsection{Heuristics}
 
-\paragraph{Admissible heuristic} An admissible heuristic never
+\paragraph{Admissibility} An admissible heuristic never
 overestimates the cost to reach the goal, that is it is
 optimistic. A heuristic h is admissible if:
 \begin{math}
@@ -14,8 +14,19 @@ In a map, the air distance between two points is an admissible
 heuristic because it is by definition the shortest distance
 between the two points.
 
+\paragraph{Consistency}
+
+\begin{math}
+h(a) - h(b) \leq cost(a to b)
+\end{math}
+
+Which implies:
+\begin{math}
+h(a) \leq cost(a to b) + h(b)
+\end{math}
+
 \begin{table}[hb!]
-\begin{tabular}{ll}
+\begin{tabular}{lL}
   Strategy & Implementation \\
   Greedy search &
   \multicolumn{1}{p{0.65\linewidth}}{
@@ -38,24 +49,29 @@ between the two points.
   \item Complete
   \item Time: exponential
   \item Space: keeps every node in memory
-  \item Optimal: If the heuristic function used by A* is
-    admissible, then A* is admissible. 
-    An intuitive proof of this is as follows: When
-    A* terminates its search, it has found a path from start to
-    goal whose actual cost is lower than the estimated cost of
-    any path from start to goal through any open node (the node's
-    $f$ value). 
-    When the heuristic is admissible, those estimates are
-    optimistic (not quite—see the next paragraph), so $A*$ can
-    safely ignore those nodes because they cannot possibly lead
-    to a cheaper solution than the one it already has. 
-    In other words, A* will never overlook the
-    possibility of a lower-cost path from start to goal and so it
-    will continue to search until no such possibilities exist.
-    (The actual proof is a bit more involved because the
-    $f$ values of open nodes are not guaranteed to
-    be optimistic even if the heuristic is admissible. This is
-    because the $g$ values of open nodes are not guaranteed to be
-    optimal, so the sum $g+h$ is not guaranteed to be optimistic)
 \end{itemize}
+
+
+\subsection{A* optimality}
+
+If the heuristic function used by A* is admissible, then A* is admissible. 
+
+\paragraph{Sketch of proof} When A* terminates its search, 
+it has found a path from start to goal whose actual cost is 
+lower than the estimated cost of
+any path from start to goal through any open node (the node's
+$f$ value). 
+When the heuristic is admissible, those estimates are
+optimistic (not quite—see the next paragraph), so $A^{*}$ can
+safely ignore those nodes because they cannot possibly lead
+to a cheaper solution than the one it already has. 
+In other words, $A^{*}$ will never overlook the
+possibility of a lower-cost path from start to goal and so it
+will continue to search until no such possibilities exist.
+
+The actual proof is a bit more involved because the
+$f$ values of open nodes are not guaranteed to
+be optimistic even if the heuristic is admissible. This is
+because the $g$ values of open nodes are not guaranteed to be
+optimal, so the sum $g+h$ is not guaranteed to be optimistic.
 

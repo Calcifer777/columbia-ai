@@ -1,0 +1,84 @@
+\section{Constraint Satisfaction Problems}
+
+Outline:
+\begin{itemize}
+    \item A special subset of search problems
+    \item State is defined by variables Xi with values from a domain D (sometimes D depends on i)
+    \item Goal test is a set of constraints specifying allowable combinations of values for subsets of variables
+\end{itemize}
+
+\paragraph{Use cases}
+\begin{itemize}
+    \item Assignment
+    \item Timetabling
+    \item Hardware configuration
+    \item Transportation scheduling
+    \item Factory scheduling
+    \item Circuit layout
+    \item Fault diagnosis
+\end{itemize}
+
+\subsection{Solving constraint satisfaction problems}
+
+\paragraph{Backtracking}
+
+\begin{itemize}
+    \item Fix an ordering for variables, and select values for variables in this order. Because assignments are commutative (e.g. assigning WA = Red, NT = Green is identical to NT = Green, WA = Red), this is valid.
+    \item When selecting values for a variable, only select values that don’t conflict with any previously assigned values. If no such values exist, backtrack and return to the previous variable, changing its value.
+\end{itemize}
+
+\subsection{Filtering}
+
+An arc $X \rightarrow Y$ if consistent if and only if for every value $x$ in X there is some $y$ in $Y$  which could be assigned without violating a constraint.
+
+\subsubsection{Arc consistency}
+\begin{itemize}
+    \item Begin by storing all arcs in the constraint graph for the CSP in a queue Q. For a binary constraint $(X,Y)$, there are two arcs to add to the queue - $X \rightarrow Y$ and $Y \rightarrow X$
+    \item Check the arcs in the queue for consistency:
+    \begin{itemize}
+        \item If one arc $X \rightarrow Y$ is not consistent for a given value $x$, remove $x$ from the domain of $X$
+        \item If at least one value is removed for a variable $X_i$, add arcs of the form $X_k \rightarrow X_i$ to the queue, for all unassigned variables $X_k$ (skip duplicate arcs already in the queue.
+        \item Continue until Q is empty, or the domain of some variable is empty and triggers a backtrack.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Forward checking}: whenever a value is assigned to a variable $X$, prune the domains of unassigned variables that share a constraint with $X$ that would violate the constraint
+if assigned.
+
+Forward checking is a special type of enforcing arc consistency, in which we only enforce the arcs pointing into the newly assigned variable.
+
+\subsection{Ordering}
+
+\paragraph{Minimum remaining values (MRV)} Choose the variable with the fewest legal options left in its domain
+
+\paragraph{Iterative improvement} 
+\begin{itemize}
+    \item Take an assignment with unsatisfied constraints
+    \item While a goal has not been reached:
+    \begin{itemize}
+        \item Reassign one variable to another value. With  min-conflict heuristic: choose a value that violates the fewest constraints
+    \end{itemize}
+\end{itemize}
+
+\subsection{K-Consistency}
+
+\textbf{K-Consistency}: For each $k$ nodes, any consistent assignment to $k-1$ ca be extended to the $k^{th}$ node.
+
+\textbf{Strong k-consistency}: also $k-1$, $k-2$, $\cdots$ $1$ consistent
+
+strong n-consistency means we can solve without backtracking!
+
+\subsection{Tree-Structured CSPs}
+
+Theorem: if the constraint graph has no loops, the CSP can be solved in $O(n d^2)$ time, with $n$ the number of nodes and $d$.
+
+\begin{itemize}
+    \item Pick an arbitrary node in the constraint graph for the CSP to serve as the root of the tree (it doesn’t matter which one because basic graph theory tells us any node of a tree can serve as a root).
+    \item Convert all undirected edges in the tree to directed edges that point away from the root. Then linearize (or topologically sort) the resulting directed acyclic graph
+    \item Perform a backwards pass of arc consistency. Iterating from i = n down to i = 2, enforce arc consistency for all arcs $Parent(Xi) \rightarrow Xi$
+    \item For the linearized CSP from above, this domain pruning will eliminate a few values, leaving us with the following
+    \item Perform a forward assignment. Starting from X1 and going to Xn, assign each Xi a value consistent with that of its parent. Because we’ve enforced arc consistency on all of these arcs, no matter what value we select for any node, we know that its children will each all have at least one consistent value. Hence, this iterative assignment guarantees a correct solution, a fact which can be proven inductively without difficulty.
+\end{itemize}
+
+The tree structured algorithm can be extended to CSPs that are reasonably close to being tree-structured
+with cutset conditioning. Cutset conditioning involves first finding the smallest subset of variables in a constraint graph such that their removal results in a tree (such a subset is known as a cutset for the graph).
